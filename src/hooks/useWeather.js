@@ -9,8 +9,17 @@ export default function useWeather(lat, lon) {
   useEffect(() => {
     if (!lat || !lon) return;
 
+    const cacheKey = `weather-${lat}-${lon}`;
+    const cached = localStorage.getItem(cacheKey);
+
     async function loadData() {
       try {
+        if (cached) {
+          setData(JSON.parse(cached));
+          setLoading(false);
+          return;
+        }
+
         const [weatherRes, airRes] = await Promise.all([
           fetchWeather(lat, lon),
           fetchAirQuality(lat, lon),
@@ -22,6 +31,7 @@ export default function useWeather(lat, lon) {
         };
 
         setData(merged);
+        localStorage.setItem(cacheKey, JSON.stringify(merged));
       } catch (err) {
         setError(err.message);
       } finally {
