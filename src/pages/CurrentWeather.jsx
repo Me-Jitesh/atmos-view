@@ -23,8 +23,21 @@ function CurrentWeather() {
       <p>UV Index: {data.current.uv_index}</p>
       <p>Wind Speed: {data.current.wind_speed_10m} km/h</p>
       <p>Precipitation: {data.current.precipitation} mm</p>
+      <p>PM10: {data.air.hourly.pm10[0]}</p>
+      <p>PM2.5: {data.air.hourly.pm2_5[0]}</p>
+      <p>CO: {data.air.hourly.carbon_monoxide[0]}</p>
+      <p>NO2: {data.air.hourly.nitrogen_dioxide[0]}</p>
+      <p>SO2: {data.air.hourly.sulphur_dioxide[0]}</p>
+      <p>AQI: {getAQI(data.air.hourly.pm2_5[0])}</p>
     </div>
   );
+}
+
+function getAQI(pm25) {
+  if (pm25 <= 12) return "Good";
+  if (pm25 <= 35) return "Moderate";
+  if (pm25 <= 55) return "Unhealthy";
+  return "Very Unhealthy";
 }
 
 export default CurrentWeather;

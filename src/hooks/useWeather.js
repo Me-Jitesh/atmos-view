@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchWeather } from "../services/api";
+import { fetchWeather, fetchAirQuality } from "../services/api";
 
 export default function useWeather(lat, lon) {
   const [data, setData] = useState(null);
@@ -9,10 +9,19 @@ export default function useWeather(lat, lon) {
   useEffect(() => {
     if (!lat || !lon) return;
 
-    async function loadWeather() {
+    async function loadData() {
       try {
-        const res = await fetchWeather(lat, lon);
-        setData(res);
+        const [weatherRes, airRes] = await Promise.all([
+          fetchWeather(lat, lon),
+          fetchAirQuality(lat, lon),
+        ]);
+
+        const merged = {
+          ...weatherRes,
+          air: airRes,
+        };
+
+        setData(merged);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -20,7 +29,7 @@ export default function useWeather(lat, lon) {
       }
     }
 
-    loadWeather();
+    loadData();
   }, [lat, lon]);
 
   return { data, loading, error };
