@@ -1,5 +1,6 @@
 const BASE_URL = "https://api.open-meteo.com/v1/forecast";
 const AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
+const ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive";
 
 export async function fetchWeather(lat, lon) {
   const params = new URLSearchParams({
@@ -72,4 +73,33 @@ export async function fetchAirQuality(lat, lon) {
   }
 
   return response.json();
+}
+
+export async function fetchHistorical(lat, lon, start, end) {
+  const params = new URLSearchParams({
+    latitude: lat,
+    longitude: lon,
+
+    start_date: start,
+    end_date: end,
+
+    daily: [
+      "temperature_2m_max",
+      "temperature_2m_min",
+      "temperature_2m_mean",
+      "sunrise",
+      "sunset",
+      "precipitation_sum",
+      "wind_speed_10m_max",
+      "wind_direction_10m_dominant",
+    ].join(","),
+
+    timezone: "auto",
+  });
+
+  const res = await fetch(`${ARCHIVE_URL}?${params}`);
+
+  if (!res.ok) throw new Error("Historical fetch failed");
+
+  return res.json();
 }
