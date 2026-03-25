@@ -51,3 +51,9 @@ body {
 .section {
     margin-top: 1.5rem;
 }
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

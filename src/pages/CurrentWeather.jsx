@@ -8,6 +8,7 @@ import TemperatureChart from "../components/charts/TemperatureChart";
 import BaseChart from "../components/charts/BaseChart";
 import AirQualityChart from "../components/charts/AirQualityChart";
 import MetricCard from "../components/ui/MetricCard";
+import Loader from "../components/ui/Loader";
 
 import { filterByDate } from "../utils/format";
 
@@ -21,10 +22,10 @@ function CurrentWeather() {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  if (geoLoading) return <p>Fetching location...</p>;
+  if (geoLoading) return <Loader label="Detecting location..." />;
   if (geoError) return <p>Error: {geoError}</p>;
 
-  if (loading) return <p>Loading weather data...</p>;
+  if (loading) return <Loader label="Loading wheather data..." />;
   if (error) return <p>Error: {error}</p>;
 
   if (!data) return null;

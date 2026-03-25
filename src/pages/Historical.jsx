@@ -4,6 +4,7 @@ import useGeolocation from "../hooks/useGeolocation";
 import useHistorical from "../hooks/useHistorical";
 import DateRangeSelector from "../components/DateRangeSelector";
 import BaseChart from "../components/charts/BaseChart";
+import Loader from "../components/ui/Loader";
 
 function formatDate(date) {
   return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -12,10 +13,8 @@ function formatDate(date) {
 }
 
 function Historical() {
-  const { location, loading: geoLoading, error: geoError } =
-    useGeolocation();
+  const { location, loading: geoLoading, error: geoError } = useGeolocation();
 
-  // ✅ Default range (last 7 days)
   const today = new Date();
   const past = new Date();
   past.setDate(today.getDate() - 7);
@@ -29,25 +28,21 @@ function Historical() {
     location.latitude,
     location.longitude,
     range.start,
-    range.end
+    range.end,
   );
 
-  // 🔹 Handle GPS states
-  if (geoLoading) return <p>Getting location...</p>;
+  if (geoLoading) return <Loader label="Getting your location..." />;
   if (geoError) return <p>Error: {geoError}</p>;
 
-  // 🔹 Handle API states
-  if (loading) return <p>Loading historical data...</p>;
+  if (loading) return <Loader label="Loading historical trends..." />;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <div style={{ padding: "1rem" }}>
       <h1>Historical Weather 📊</h1>
 
-      {/* 📅 Date Range Picker */}
       <DateRangeSelector setRange={setRange} />
 
-      {/* 📊 Charts */}
       {data && data.daily && data.daily.time.length > 0 ? (
         <>
           <h2>Temperature Trends</h2>
