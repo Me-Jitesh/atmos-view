@@ -1,5 +1,9 @@
 export function filterByDate(data, selectedDate) {
-  const target = selectedDate.toISOString().split("T")[0];
+  const target = new Date(
+    selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000,
+  )
+    .toISOString()
+    .split("T")[0];
 
   const indices = data.hourly.time
     .map((t, i) => (t.startsWith(target) ? i : -1))

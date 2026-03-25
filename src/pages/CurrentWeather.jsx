@@ -28,11 +28,18 @@ function CurrentWeather() {
 
   if (!data) return null;
 
-  const selected = selectedDate.toLocaleDateString("en-CA");
+  const selected = new Date(
+    selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000,
+  )
+    .toISOString()
+    .split("T")[0];
 
   const filteredHourly = filterByDate(data, selectedDate);
 
   const dayIndex = data.daily.time.findIndex((d) => d === selected);
+
+  console.log("Selected:", selected);
+  console.log("Filtered:", filteredHourly);
 
   return (
     <div style={{ padding: "1rem" }}>

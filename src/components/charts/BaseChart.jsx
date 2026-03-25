@@ -25,6 +25,10 @@ function BaseChart({
       value: transform(data.hourly[dataKey][index + range[0]]),
     }));
 
+  if (!data?.hourly?.time || data.hourly.time.length === 0) {
+    return <p>No data available for selected date</p>;
+  }
+
   return (
     <div style={{ marginBottom: "2rem" }}>
       <h3>{title}</h3>
