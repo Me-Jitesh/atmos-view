@@ -5,6 +5,7 @@ import useHistorical from "../hooks/useHistorical";
 import DateRangeSelector from "../components/DateRangeSelector";
 import BaseChart from "../components/charts/BaseChart";
 import Loader from "../components/ui/Loader";
+import Chip from "../components/ui/Chip";
 
 function formatDate(date) {
   return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -38,77 +39,89 @@ function Historical() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h1>Historical Weather 📊</h1>
+    <div className="container">
+      <h1 className="title">HISTORICAL</h1>
 
       <DateRangeSelector setRange={setRange} />
 
-      {data && data.daily && data.daily.time.length > 0 ? (
+      {data && data.daily && (
         <>
-          <h2>Temperature Trends</h2>
+          <div className="grid-chips section">
+            <Chip
+              label="Avg Temp"
+              value={`${Math.round(
+                data.daily.temperature_2m_mean.reduce((a, b) => a + b, 0) /
+                  data.daily.temperature_2m_mean.length,
+              )}°C`}
+            />
+            <Chip
+              label="Max Wind"
+              value={`${Math.max(...data.daily.wind_speed_10m_max)} km/h`}
+            />
+            <Chip
+              label="Rain Total"
+              value={`${data.daily.precipitation_sum.reduce((a, b) => a + b, 0)} mm`}
+            />
+          </div>
 
-          <BaseChart
-            title="Max Temperature"
-            data={{
-              hourly: {
-                time: data.daily.time,
-                temperature_2m_max: data.daily.temperature_2m_max,
-              },
-            }}
-            dataKey="temperature_2m_max"
-            unit="°C"
-          />
+          <div className="grid-charts section">
+            <div className="card">
+              <BaseChart
+                title="Max Temp"
+                data={{
+                  hourly: {
+                    time: data.daily.time,
+                    temperature_2m_max: data.daily.temperature_2m_max,
+                  },
+                }}
+                dataKey="temperature_2m_max"
+                unit="°C"
+              />
+            </div>
 
-          <BaseChart
-            title="Min Temperature"
-            data={{
-              hourly: {
-                time: data.daily.time,
-                temperature_2m_min: data.daily.temperature_2m_min,
-              },
-            }}
-            dataKey="temperature_2m_min"
-            unit="°C"
-          />
+            <div className="card">
+              <BaseChart
+                title="Min Temp"
+                data={{
+                  hourly: {
+                    time: data.daily.time,
+                    temperature_2m_min: data.daily.temperature_2m_min,
+                  },
+                }}
+                dataKey="temperature_2m_min"
+                unit="°C"
+              />
+            </div>
 
-          <BaseChart
-            title="Mean Temperature"
-            data={{
-              hourly: {
-                time: data.daily.time,
-                temperature_2m_mean: data.daily.temperature_2m_mean,
-              },
-            }}
-            dataKey="temperature_2m_mean"
-            unit="°C"
-          />
+            <div className="card">
+              <BaseChart
+                title="Precipitation"
+                data={{
+                  hourly: {
+                    time: data.daily.time,
+                    precipitation_sum: data.daily.precipitation_sum,
+                  },
+                }}
+                dataKey="precipitation_sum"
+                unit="mm"
+              />
+            </div>
 
-          <BaseChart
-            title="Precipitation Total"
-            data={{
-              hourly: {
-                time: data.daily.time,
-                precipitation_sum: data.daily.precipitation_sum,
-              },
-            }}
-            dataKey="precipitation_sum"
-            unit="mm"
-          />
-
-          <BaseChart
-            title="Max Wind Speed"
-            data={{
-              hourly: {
-                time: data.daily.time,
-                wind_speed_10m_max: data.daily.wind_speed_10m_max,
-              },
-            }}
-            dataKey="wind_speed_10m_max"
-            unit="km/h"
-          />
+            <div className="card">
+              <BaseChart
+                title="Wind Speed"
+                data={{
+                  hourly: {
+                    time: data.daily.time,
+                    wind_speed_10m_max: data.daily.wind_speed_10m_max,
+                  },
+                }}
+                dataKey="wind_speed_10m_max"
+                unit="km/h"
+              />
+            </div>
+          </div>
         </>
-      ) : (
-        <p>No historical data available for selected range</p>
       )}
     </div>
   );

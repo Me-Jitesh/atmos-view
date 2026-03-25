@@ -10,7 +10,6 @@ function Loader({ label = "Loading..." }) {
         gap: "0.8rem",
       }}
     >
-      {/* Spinner */}
       <div
         style={{
           width: 32,

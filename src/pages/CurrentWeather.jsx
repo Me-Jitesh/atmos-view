@@ -7,7 +7,7 @@ import DateSelector from "../components/DateSelector";
 import TemperatureChart from "../components/charts/TemperatureChart";
 import BaseChart from "../components/charts/BaseChart";
 import AirQualityChart from "../components/charts/AirQualityChart";
-import MetricCard from "../components/ui/MetricCard";
+import Chip from "../components/ui/Chip";
 import Loader from "../components/ui/Loader";
 
 import { filterByDate } from "../utils/format";
@@ -43,6 +43,13 @@ function CurrentWeather() {
   console.log("Selected:", selected);
   console.log("Filtered:", filteredHourly);
 
+  function formatTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
   return (
     <div className="container">
       <h1 className="title">ATMOS VIEW</h1>
@@ -52,54 +59,38 @@ function CurrentWeather() {
         setSelectedDate={setSelectedDate}
       />
 
-      {/* 🔹 Current Metrics */}
-      <div className="grid grid-2 section">
-        <MetricCard
-          label="Temperature"
-          value={`${data.current.temperature_2m}°C`}
-          type="temp"
-        />
-        <MetricCard
+      <div className="grid-chips section">
+        <Chip label="Temp" value={`${data.current.temperature_2m}°C`} />
+        <Chip
           label="Humidity"
           value={`${data.current.relative_humidity_2m}%`}
-          type="humidity"
         />
-        <MetricCard
-          label="Wind"
-          value={`${data.current.wind_speed_10m} km/h`}
-          type="wind"
-        />
-        <MetricCard label="UV Index" value={data.current.uv_index} type="uv" />
+        <Chip label="Wind" value={`${data.current.wind_speed_10m} km/h`} />
+        <Chip label="UV" value={data.current.uv_index} />
+        <Chip label="PM2.5" value={data.air.hourly.pm2_5[0]} />
+        <Chip label="PM10" value={data.air.hourly.pm10[0]} />
       </div>
 
-      {/* 🔹 Daily Summary */}
       {dayIndex !== -1 && (
         <div className="card section">
-          <h2 className="subtitle">Daily Summary</h2>
-          <div className="grid grid-2">
-            <p>Min: {data.daily.temperature_2m_min[dayIndex]}°C</p>
-            <p>Max: {data.daily.temperature_2m_max[dayIndex]}°C</p>
-            <p>Sunrise: {data.daily.sunrise[dayIndex]}</p>
-            <p>Sunset: {data.daily.sunset[dayIndex]}</p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "0.5rem 1rem",
+              fontSize: "0.9rem",
+            }}
+          >
+            <div>Min: {data.daily.temperature_2m_min[dayIndex]}°C</div>
+            <div>Max: {data.daily.temperature_2m_max[dayIndex]}°C</div>
+
+            <div>🌅 {formatTime(data.daily.sunrise[dayIndex])}</div>
+            <div>🌇 {formatTime(data.daily.sunset[dayIndex])}</div>
           </div>
         </div>
       )}
 
-      {/* 🔹 Air Quality */}
-      <div className="card section">
-        <h2 className="subtitle">Air Quality</h2>
-        <div className="grid grid-2">
-          <p>PM10: {data.air.hourly.pm10[0]}</p>
-          <p>PM2.5: {data.air.hourly.pm2_5[0]}</p>
-          <p>CO: {data.air.hourly.carbon_monoxide[0]}</p>
-          <p>NO2: {data.air.hourly.nitrogen_dioxide[0]}</p>
-        </div>
-      </div>
-
-      {/* 🔹 Charts */}
-      <div className="section">
-        <h2 className="subtitle">Hourly Trends</h2>
-
+      <div className="grid-charts section">
         <div className="card">
           <TemperatureChart data={{ hourly: filteredHourly }} />
         </div>
@@ -115,10 +106,19 @@ function CurrentWeather() {
 
         <div className="card">
           <BaseChart
-            title="Wind Speed"
+            title="Wind"
             data={{ hourly: filteredHourly }}
             dataKey="wind_speed_10m"
             unit="km/h"
+          />
+        </div>
+
+        <div className="card">
+          <BaseChart
+            title="Precipitation"
+            data={{ hourly: filteredHourly }}
+            dataKey="precipitation"
+            unit="mm"
           />
         </div>
 
