@@ -16,23 +16,31 @@ export default function useGeolocation() {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-        setLoading(false);
-      },
-      (err) => {
-        setError(err.message);
-        setLoading(false);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-      },
-    );
+    const success = (position) => {
+      setLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+      setLoading(false);
+    };
+
+    const fail = (err) => {
+      console.warn("Geo error:", err.message);
+
+      setLocation({
+        latitude: 23.2599,
+        longitude: 77.4126,
+      });
+
+      setError("Using default location");
+      setLoading(false);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, fail, {
+      enableHighAccuracy: false,
+      timeout: 10000,
+      maximumAge: 300000,
+    });
   }, []);
 
   return { location, error, loading };
