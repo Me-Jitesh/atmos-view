@@ -40,7 +40,7 @@ function Historical() {
 
   return (
     <div className="container">
-      <h1 className="title">HISTORICAL</h1>
+      <h2 className="title">HISTORICAL TRENDS</h2>
 
       <DateRangeSelector setRange={setRange} />
 

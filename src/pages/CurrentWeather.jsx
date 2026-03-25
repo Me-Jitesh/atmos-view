@@ -52,8 +52,6 @@ function CurrentWeather() {
   }
   return (
     <div className="container">
-      <h1 className="title">ATMOS VIEW</h1>
-
       <DateSelector
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
