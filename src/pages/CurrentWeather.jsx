@@ -1,5 +1,8 @@
 import useGeolocation from "../hooks/useGeolocation";
 import useWeather from "../hooks/useWeather";
+import TemperatureChart from "../components/charts/TemperatureChart";
+import BaseChart from "../components/charts/BaseChart";
+import AirQualityChart from "../components/charts/AirQualityChart";
 
 function CurrentWeather() {
   const { location, error: geoError, loading: geoLoading } = useGeolocation();
@@ -29,6 +32,35 @@ function CurrentWeather() {
       <p>NO2: {data.air.hourly.nitrogen_dioxide[0]}</p>
       <p>SO2: {data.air.hourly.sulphur_dioxide[0]}</p>
       <p>AQI: {getAQI(data.air.hourly.pm2_5[0])}</p>
+
+      <h2>Charts</h2>
+
+      <TemperatureChart data={data} />
+
+      <BaseChart
+        title="Humidity"
+        data={data}
+        dataKey="relative_humidity_2m"
+        unit="%"
+      />
+
+      <BaseChart
+        title="Precipitation"
+        data={data}
+        dataKey="precipitation"
+        unit="mm"
+      />
+
+      <BaseChart title="Visibility" data={data} dataKey="visibility" unit="m" />
+
+      <BaseChart
+        title="Wind Speed"
+        data={data}
+        dataKey="wind_speed_10m"
+        unit="km/h"
+      />
+
+      <AirQualityChart data={data} />
     </div>
   );
 }
