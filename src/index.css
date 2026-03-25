@@ -29,18 +29,18 @@ body {
 }
 
 .btn {
-    background: var(--primary-light);
-    color: var(--primary);
+    background: #2563eb;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 0.9rem;
     border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.85rem;
     transition: all 0.2s ease;
 }
 
 .btn:hover {
-    background: #bfdbfe;
+    background: #1d4ed8;
 }
 
 .btn-toggle {
