@@ -8,7 +8,10 @@ function TemperatureChart({ data }) {
 
   return (
     <div>
-      <button onClick={() => setUnit(unit === "C" ? "F" : "C")}>
+      <button
+        className="btn btn-toggle"
+        onClick={() => setUnit(unit === "C" ? "F" : "C")}
+      >
         Switch to °{unit === "C" ? "F" : "C"}
       </button>
 

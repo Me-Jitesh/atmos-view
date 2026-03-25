@@ -34,10 +34,16 @@ function BaseChart({
       <h3>{title}</h3>
 
       {/* Zoom Controls */}
-      <div>
-        <button onClick={() => setRange([0, 12])}>0–12h</button>
-        <button onClick={() => setRange([12, 24])}>12–24h</button>
-        <button onClick={() => setRange([0, 24])}>Full</button>
+      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+        <button className="btn" onClick={() => setRange([0, 12])}>
+          0–12h
+        </button>
+        <button className="btn" onClick={() => setRange([12, 24])}>
+          12–24h
+        </button>
+        <button className="btn" onClick={() => setRange([0, 24])}>
+          Full
+        </button>
       </div>
 
       <div style={{ width: "100%", overflowX: "auto" }}>
@@ -47,7 +53,13 @@ function BaseChart({
               <XAxis dataKey="time" />
               <YAxis />
               <Tooltip formatter={(v) => `${v} ${unit}`} />
-              <Line type="monotone" dataKey="value" stroke={color} />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="#2563eb"
+                strokeWidth={2}
+                dot={false}
+              />{" "}
             </LineChart>
           </ResponsiveContainer>
         </div>

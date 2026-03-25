@@ -7,6 +7,7 @@ import DateSelector from "../components/DateSelector";
 import TemperatureChart from "../components/charts/TemperatureChart";
 import BaseChart from "../components/charts/BaseChart";
 import AirQualityChart from "../components/charts/AirQualityChart";
+import MetricCard from "../components/ui/MetricCard";
 
 import { filterByDate } from "../utils/format";
 
@@ -42,85 +43,88 @@ function CurrentWeather() {
   console.log("Filtered:", filteredHourly);
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h1>Atmos View 🌦️</h1>
+    <div className="container">
+      <h1 className="title">ATMOS VIEW</h1>
 
       <DateSelector
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
 
-      <section>
-        <h2>Current Conditions</h2>
-        <p>Temperature: {data.current.temperature_2m}°C</p>
-        <p>Humidity: {data.current.relative_humidity_2m}%</p>
-        <p>UV Index: {data.current.uv_index}</p>
-        <p>Wind Speed: {data.current.wind_speed_10m} km/h</p>
-        <p>Precipitation: {data.current.precipitation} mm</p>
-      </section>
+      {/* 🔹 Current Metrics */}
+      <div className="grid grid-2 section">
+        <MetricCard
+          label="Temperature"
+          value={`${data.current.temperature_2m}°C`}
+          type="temp"
+        />
+        <MetricCard
+          label="Humidity"
+          value={`${data.current.relative_humidity_2m}%`}
+          type="humidity"
+        />
+        <MetricCard
+          label="Wind"
+          value={`${data.current.wind_speed_10m} km/h`}
+          type="wind"
+        />
+        <MetricCard label="UV Index" value={data.current.uv_index} type="uv" />
+      </div>
 
+      {/* 🔹 Daily Summary */}
       {dayIndex !== -1 && (
-        <section>
-          <h2>Daily Summary</h2>
-          <p>Min Temp: {data.daily.temperature_2m_min[dayIndex]}°C</p>
-          <p>Max Temp: {data.daily.temperature_2m_max[dayIndex]}°C</p>
-
-          <p>Sunrise: {data.daily.sunrise[dayIndex]}</p>
-          <p>Sunset: {data.daily.sunset[dayIndex]}</p>
-
-          <p>
-            Precipitation Probability Max:{" "}
-            {data.daily.precipitation_probability_max[dayIndex]}%
-          </p>
-
-          <p>Max Wind Speed: {data.daily.wind_speed_10m_max[dayIndex]} km/h</p>
-        </section>
+        <div className="card section">
+          <h2 className="subtitle">Daily Summary</h2>
+          <div className="grid grid-2">
+            <p>Min: {data.daily.temperature_2m_min[dayIndex]}°C</p>
+            <p>Max: {data.daily.temperature_2m_max[dayIndex]}°C</p>
+            <p>Sunrise: {data.daily.sunrise[dayIndex]}</p>
+            <p>Sunset: {data.daily.sunset[dayIndex]}</p>
+          </div>
+        </div>
       )}
 
-      <section>
-        <h2>Air Quality</h2>
-        <p>PM10: {data.air.hourly.pm10[0]}</p>
-        <p>PM2.5: {data.air.hourly.pm2_5[0]}</p>
-        <p>CO: {data.air.hourly.carbon_monoxide[0]}</p>
-        <p>NO2: {data.air.hourly.nitrogen_dioxide[0]}</p>
-        <p>SO2: {data.air.hourly.sulphur_dioxide[0]}</p>
-      </section>
+      {/* 🔹 Air Quality */}
+      <div className="card section">
+        <h2 className="subtitle">Air Quality</h2>
+        <div className="grid grid-2">
+          <p>PM10: {data.air.hourly.pm10[0]}</p>
+          <p>PM2.5: {data.air.hourly.pm2_5[0]}</p>
+          <p>CO: {data.air.hourly.carbon_monoxide[0]}</p>
+          <p>NO2: {data.air.hourly.nitrogen_dioxide[0]}</p>
+        </div>
+      </div>
 
-      <section>
-        <h2>Hourly Charts</h2>
+      {/* 🔹 Charts */}
+      <div className="section">
+        <h2 className="subtitle">Hourly Trends</h2>
 
-        <TemperatureChart data={{ hourly: filteredHourly }} />
+        <div className="card">
+          <TemperatureChart data={{ hourly: filteredHourly }} />
+        </div>
 
-        <BaseChart
-          title="Humidity"
-          data={{ hourly: filteredHourly }}
-          dataKey="relative_humidity_2m"
-          unit="%"
-        />
+        <div className="card">
+          <BaseChart
+            title="Humidity"
+            data={{ hourly: filteredHourly }}
+            dataKey="relative_humidity_2m"
+            unit="%"
+          />
+        </div>
 
-        <BaseChart
-          title="Precipitation"
-          data={{ hourly: filteredHourly }}
-          dataKey="precipitation"
-          unit="mm"
-        />
+        <div className="card">
+          <BaseChart
+            title="Wind Speed"
+            data={{ hourly: filteredHourly }}
+            dataKey="wind_speed_10m"
+            unit="km/h"
+          />
+        </div>
 
-        <BaseChart
-          title="Visibility"
-          data={{ hourly: filteredHourly }}
-          dataKey="visibility"
-          unit="m"
-        />
-
-        <BaseChart
-          title="Wind Speed"
-          data={{ hourly: filteredHourly }}
-          dataKey="wind_speed_10m"
-          unit="km/h"
-        />
-
-        <AirQualityChart data={data} />
-      </section>
+        <div className="card">
+          <AirQualityChart data={data} />
+        </div>
+      </div>
     </div>
   );
 }
