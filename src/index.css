@@ -7,7 +7,7 @@
     --primary-light: #dbeafe;
 
     --text: #0f172a;
-    --muted: #64748b;
+    --muted: #3b5b7a;
 }
 
 * {
@@ -47,8 +47,8 @@ body {
 
 .btn,
 .btn-pill {
-    background: #e0f2fe;
-    color: #0369a1;
+    background: #c7e0ff;
+    color: #2563eb;
     padding: 8px 16px;
     margin: 8px;
     border-radius: 999px;
@@ -63,6 +63,7 @@ body {
 .btn:hover,
 .btn-pill:hover {
     background: #bae6fd;
+    color: #1e3a8a;
     transform: translateY(-1px);
 }
 
@@ -94,7 +95,7 @@ body {
     padding: 2rem 1rem;
     animation: fadeIn 0.4s ease;
 
-    background: #eaf4ff;
+    background: #dbeafe;
 }
 
 .landing-logo {

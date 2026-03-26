@@ -10,6 +10,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/current" element={<CurrentWeather />} />
         <Route path="/historical" element={<Historical />} />
+        <Route path="*" element={<Landing />} />
       </Routes>
     </BrowserRouter>
   );
