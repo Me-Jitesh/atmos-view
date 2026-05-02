@@ -1,4 +1,4 @@
-# 🌤️ Atmos View
+# 🌤️ Atmos View - Weather Dashboard
 
 Live Demo: https://atmos-view.vercel.app/
 
